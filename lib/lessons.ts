@@ -2,10 +2,7 @@ export type Lesson = {
   id: string;
   title: string;
   description: string;
-  words: {
-    term: string;
-    translation: string;
-  }[];
+  words: { term: string; translation: string }[];
 };
 
 export const lessons: Lesson[] = [

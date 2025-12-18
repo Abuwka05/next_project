@@ -7,15 +7,11 @@ export const metadata: Metadata = {
   description: 'Language learning platform with lessons, flashcards and community',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <Navbar />
+        <Navbar /> {/* Navbar client component */}
         <main className="container mx-auto px-4 py-6">
           {children}
         </main>
