@@ -10,7 +10,31 @@ type Props = {
 
 export default function Flashcard({ term, translation }: Props) {
   const [flipped, setFlipped] = useState(false);
+  const [definition, setDefinition] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
   const { markKnown, markUnknown } = useFlashcardStore();
+
+  const loadDefinition = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      const res = await fetch(`/api/dictionary?word=${term}`);
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error);
+      }
+
+      setDefinition(data.definition);
+    } catch {
+      setError('Definition not available');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="border rounded p-6 text-center space-y-4">
@@ -34,6 +58,23 @@ export default function Flashcard({ term, translation }: Props) {
         >
           I don’t know
         </button>
+      </div>
+
+      <div>
+        <button
+          onClick={loadDefinition}
+          className="text-blue-600 underline"
+        >
+          Show definition
+        </button>
+
+        {loading && <p className="text-sm">Loading...</p>}
+        {error && <p className="text-sm text-red-600">{error}</p>}
+        {definition && (
+          <p className="mt-2 text-sm text-gray-700">
+            {definition}
+          </p>
+        )}
       </div>
     </div>
   );
